@@ -1,5 +1,5 @@
-from typing import Type, Dict
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
+from typing import Dict, Type
 
 
 @dataclass
@@ -49,8 +49,8 @@ class Training:
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         raise NotImplementedError(
-            'Определите метод get_spent_calories() в %s.'
-            % (self.__class__.__name__))
+            f'Определите метод get_spent_calories() '
+            f'в {self.__class__.__name__}')
 
     def show_training_info(self) -> InfoMessage:
         """Возвращяем обьект класса сообщение."""
@@ -102,6 +102,8 @@ class Swimming(Training):
     """Тренировка: плавание."""
 
     LEN_STEP: float = 1.38
+    CAL_PARAM_1: float = 1.1
+    CAL_PARAM_2: int = 2
 
     def __init__(self,
                  action: int,
@@ -122,24 +124,26 @@ class Swimming(Training):
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        return (self.get_mean_speed() + 1.1) * 2 * self.weight
+        return ((self.get_mean_speed() + self.CAL_PARAM_1)
+                * self.CAL_PARAM_2 * self.weight)
 
 
 def read_package(workout_type: str, data: list) -> Training:
     """Определяем тип тренировки из полученных данных."""
-    try:
-        train_package: Dict[str, Type[Training]] = {'SWM': Swimming,
-                                                    'RUN': Running,
-                                                    'WLK': SportsWalking}
+    train_package: Dict[str, Type[Training]] = {'SWM': Swimming,
+                                                'RUN': Running,
+                                                'WLK': SportsWalking}
+    text_error: str = ', '.join(train_package)
+    if workout_type in train_package:
         return train_package[workout_type](*data)
-    except Exception:
-        print(f'Неизвестный тип тренировки - {workout_type}')
+    else:
+        raise ValueError(f'Неизвестный тип тренировки - {workout_type}, '
+                         f'необходим один из следующих типов: {text_error}')
 
 
 def main(training: Training) -> None:
     """Главная функция."""
-    info = training.show_training_info()
-    print(info.get_message())
+    print(training.show_training_info().get_message())
 
 
 if __name__ == '__main__':
