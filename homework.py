@@ -25,9 +25,9 @@ class InfoMessage:
 class Training:
     """Базовый класс тренировки."""
 
-    M_IN_KM: int = 1000
+    M_IN_KM: float = 1000
     LEN_STEP: float = 0.65
-    HOURS_IN_MINUTES: int = 60
+    HOURS_IN_MINUTES: float = 60
 
     def __init__(self,
                  action: int,
@@ -49,7 +49,7 @@ class Training:
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         raise NotImplementedError(
-            f'Определите метод get_spent_calories() '
+            'Определите метод get_spent_calories() '
             f'в {self.__class__.__name__}')
 
     def show_training_info(self) -> InfoMessage:
@@ -134,11 +134,10 @@ def read_package(workout_type: str, data: list) -> Training:
                                                 'RUN': Running,
                                                 'WLK': SportsWalking}
     text_error: str = ', '.join(train_package)
-    if workout_type in train_package:
-        return train_package[workout_type](*data)
-    else:
+    if workout_type not in train_package:
         raise ValueError(f'Неизвестный тип тренировки - {workout_type}, '
                          f'необходим один из следующих типов: {text_error}')
+    return train_package[workout_type](*data)
 
 
 def main(training: Training) -> None:
