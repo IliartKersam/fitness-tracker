@@ -1,4 +1,5 @@
 # Fitness tracker
+This is a project as part of the training course Yandex praktikum - "Python Developer"
 ### Description
 ####  This module:
 - receives information about the past training from the sensor unit,
