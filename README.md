@@ -1,11 +1,11 @@
 # Fitness tracker
 ### Description
-#####  This module:
+####  This module:
 - receives information about the past training from the sensor unit,
 - determines the type of training
 - calculates the results of the workout,
 - displays an informational message about the results of the workout.
-##### The information message should include the following information:
+#### The information message should include the following information:
 - type of training (running, walking or swimming);
 - workout duration
 - distance covered by the user, in kilometers;
