@@ -18,7 +18,7 @@ This is a project as part of the training course Yandex praktikum - "Python Deve
 ### How to run the project:
 Clone repository and go to it's derictory on your computer:
 ```
-git clone https://github.com/IliartKersam/hw_python_oop.git
+git clone https://github.com/IliartKersam/Fitness-tracker.git
 ```
 ```
 cd hw_python_oop
