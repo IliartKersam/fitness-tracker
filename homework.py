@@ -4,30 +4,30 @@ from typing import Dict, Type
 
 @dataclass
 class InfoMessage:
-    """Информационное сообщение о тренировке."""
+    """Informational message about the workout."""
 
     training_type: str
     duration: float
     distance: float
     speed: float
     calories: float
-    MESSAGE: str = ('Тип тренировки: {training_type}; '
-                    'Длительность: {duration:.3f} ч.; '
-                    'Дистанция: {distance:.3f} км; '
-                    'Ср. скорость: {speed:.3f} км/ч; '
-                    'Потрачено ккал: {calories:.3f}.')
+    MESSAGE: str = ('Workout type: {training_type}; '
+                    'Duration: {duration:.3f} h.; '
+                    'Distance: {distance:.3f} km; '
+                    'Mean speed: {speed:.3f} km/h; '
+                    'Calories burned: {calories:.3f}.')
 
     def get_message(self):
-        """Формируем сообщение с полученными результатами."""
+        """Create message with the results."""
         return self.MESSAGE.format(**asdict(self))
 
 
 class Training:
-    """Базовый класс тренировки."""
+    """Base workout class."""
 
-    M_IN_KM: float = 1000
-    LEN_STEP: float = 0.65
-    HOURS_IN_MINUTES: float = 60
+    M_IN_KM: float = 1000 # Set meters in a kilometer.
+    LEN_STEP: float = 0.65 # The parameter is taken from the technical documentation.
+    HOURS_IN_MINUTES: float = 60 # Set the minutes in a hour.
 
     def __init__(self,
                  action: int,
@@ -39,21 +39,21 @@ class Training:
         self.weight = weight
 
     def get_distance(self) -> float:
-        """Получить дистанцию в км."""
+        """Get distance in kilometers."""
         return self.action * self.LEN_STEP / self.M_IN_KM
 
     def get_mean_speed(self) -> float:
-        """Получить среднюю скорость движения."""
+        """Get mean speed."""
         return self.get_distance() / self.duration
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
+        """Get count of burned calories."""
         raise NotImplementedError(
-            'Определите метод get_spent_calories() '
-            f'в {self.__class__.__name__}')
+            'Define get_spent_calories() '
+            f'in {self.__class__.__name__}')
 
     def show_training_info(self) -> InfoMessage:
-        """Возвращяем обьект класса сообщение."""
+        """Return an object of InfoMessage class."""
         return InfoMessage(self.__class__.__name__,
                            self.duration,
                            self.get_distance(),
@@ -62,24 +62,24 @@ class Training:
 
 
 class Running(Training):
-    """Тренировка: бег."""
+    """Training: Running."""
 
-    CAL_PARAM_1: int = 18
-    CAL_PARAM_2: int = 20
+    CAL_PARAM_1: int = 18 # The parameter is taken from the technical documentation.
+    CAL_PARAM_2: int = 20 # The parameter is taken from the technical documentation.
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
+        """Redefine method - Get count of burned calories."""
         return ((self.CAL_PARAM_1 * self.get_mean_speed()
                 - self.CAL_PARAM_2) * self.weight / self.M_IN_KM
                 * self.duration * self.HOURS_IN_MINUTES)
 
 
 class SportsWalking(Training):
-    """Тренировка: спортивная ходьба."""
+    """Training: SportsWalking."""
 
-    CAL_PARAM_1: float = 0.035
-    CAL_PARAM_2: float = 0.029
-    CAL_PARAM_3: int = 2
+    CAL_PARAM_1: float = 0.035 # The parameter is taken from the technical documentation.
+    CAL_PARAM_2: float = 0.029 # The parameter is taken from the technical documentation.
+    CAL_PARAM_3: int = 2 # The parameter is taken from the technical documentation.
 
     def __init__(self,
                  action: int,
@@ -91,7 +91,7 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
+        """Redefine method - Get count of burned calories."""
         return ((self.CAL_PARAM_1 * self.weight
                 + (self.get_mean_speed() ** self.CAL_PARAM_3 // self.height)
                 * self.CAL_PARAM_2 * self.weight)
@@ -99,11 +99,11 @@ class SportsWalking(Training):
 
 
 class Swimming(Training):
-    """Тренировка: плавание."""
+    """Training: Swimming."""
 
-    LEN_STEP: float = 1.38
-    CAL_PARAM_1: float = 1.1
-    CAL_PARAM_2: int = 2
+    LEN_STEP: float = 1.38 # The parameter is taken from the technical documentation.
+    CAL_PARAM_1: float = 1.1 # The parameter is taken from the technical documentation.
+    CAL_PARAM_2: int = 2 # The parameter is taken from the technical documentation.
 
     def __init__(self,
                  action: int,
@@ -116,32 +116,32 @@ class Swimming(Training):
         self.count_pool: float = count_pool
 
     def get_mean_speed(self) -> float:
-        """Получить среднюю скорость движения."""
+        """Redefine method - Get mean speed."""
         return (self.length_pool
                 * self.count_pool
                 / self.M_IN_KM
                 / self.duration)
 
     def get_spent_calories(self) -> float:
-        """Получить количество затраченных калорий."""
+        """Redefine method - Get count of burned calories."""
         return ((self.get_mean_speed() + self.CAL_PARAM_1)
                 * self.CAL_PARAM_2 * self.weight)
 
 
 def read_package(workout_type: str, data: list) -> Training:
-    """Определяем тип тренировки из полученных данных."""
+    """Determine the type of workout from the received data."""
     train_package: Dict[str, Type[Training]] = {'SWM': Swimming,
                                                 'RUN': Running,
                                                 'WLK': SportsWalking}
     text_error: str = ', '.join(train_package)
     if workout_type not in train_package:
-        raise ValueError(f'Неизвестный тип тренировки - {workout_type}, '
-                         f'необходим один из следующих типов: {text_error}')
+        raise ValueError(f'Unknown workout type - {workout_type}, '
+                         f'one of the following types is required: {text_error}')
     return train_package[workout_type](*data)
 
 
-def main(training: Training) -> None:
-    """Главная функция."""
+def training_result(training: Training) -> None:
+    """Output of workout results."""
     print(training.show_training_info().get_message())
 
 
@@ -154,4 +154,4 @@ if __name__ == '__main__':
 
     for workout_type, data in packages:
         training = read_package(workout_type, data)
-        main(training)
+        training_result(training)
