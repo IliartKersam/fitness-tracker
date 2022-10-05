@@ -20,7 +20,7 @@ Clone repository and go to it's derictory on your computer:
 git clone https://github.com/IliartKersam/Fitness-tracker.git
 ```
 ```
-cd Fitness-tracker
+cd Fitness-tracker/
 ```
 Create and activate virtual environment:
 
