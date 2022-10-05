@@ -2,12 +2,12 @@
 This is a project as part of the training course Yandex praktikum - "Python Developer"
 ### Description
 ####  This module:
-- receives information about the past training from the sensor unit,
-- determines the type of training
+- receives information about the past workout from the sensor unit,
+- determines the type of workout
 - calculates the results of the workout,
 - displays an informational message about the results of the workout.
 #### The information message should include the following information:
-- type of training (running, walking or swimming);
+- type of workout (running, walking or swimming);
 - workout duration
 - distance covered by the user, in kilometers;
 - mean speed at a distance, in km/h;
