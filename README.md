@@ -43,4 +43,5 @@ python homework.py
 ```
 ### Author
 Kashtanov Nikolay
+
 Kazan, 2022
